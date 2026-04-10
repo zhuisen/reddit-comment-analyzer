@@ -1,0 +1,62 @@
+# Reddit Comment Analyzer - Configuration Template
+# Copy this to config.yaml and customize.
+
+reddit:
+  # Required: descriptive User-Agent per Reddit API guidelines
+  user_agent: "script:reddit-comment-analyzer:v0.1.0 (by /u/yourname)"
+  # Stay well below Reddit's official 100 req/min limit
+  rate_limit_rpm: 60
+  # Delay between requests in seconds (additional safety buffer)
+  request_delay_seconds: 1.5
+  # Respect HTTP 429 / Retry-After automatically
+  auto_backoff: true
+
+collection:
+  # Target subreddits (public only)
+  subreddits:
+    - singapore
+    - technology
+    - SaaS
+    - datascience
+  # Post categories to sample
+  categories:
+    - hot
+    - new
+  # Max posts per run per subreddit
+  max_posts_per_run: 50
+  # How deep to traverse comment trees
+  comment_depth: 3
+  # Skip posts below this score (filter spam/low-quality)
+  min_post_score: 5
+  # Skip deleted/removed content
+  skip_deleted: true
+
+analysis:
+  # Sentiment model (runs locally, no external API calls)
+  sentiment_model: "distilbert-base-uncased-finetuned-sst-2-english"
+  # Topic extraction
+  topic_model: "sentence-transformers/all-MiniLM-L6-v2"
+  # Batch size for NLP inference
+  batch_size: 16
+  # Minimum comment length to analyze (filter noise)
+  min_comment_length: 20
+
+storage:
+  # Local SQLite database path
+  database_path: "./data/analysis.db"
+  # Auto-cleanup data older than N days (0 = keep forever)
+  retention_days: 90
+
+privacy:
+  # Strip usernames from stored data (aggregate-only mode)
+  anonymize_authors: true
+  # Do not store comment body text, only sentiment scores
+  hash_comment_bodies: false
+  # Subreddits to explicitly exclude (NSFW, sensitive, etc.)
+  excluded_subreddits: []
+
+reporting:
+  # Output format for trend reports
+  format: "markdown"
+  # Where to save reports
+  output_dir: "./reports"

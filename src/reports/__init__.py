@@ -1,0 +1,1 @@
+"""Aggregated trend reports."""
